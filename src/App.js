@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route, withRouter } from 'react-router-dom'
-import Login from './components/login'
+import LoginMain from './components/loginMain'
+import SignUpPage from './components/signUpPage'
 import Styled from 'styled-components'
 
 const AppDiv = Styled.div`
@@ -10,7 +11,8 @@ const AppDiv = Styled.div`
 const renderRoutes = () => {
   return (
     <>
-      <Route exact path="/" component={Login}/>
+      <Route exact path="/" component={LoginMain}/>
+      <Route path="/signUp" component={SignUpPage} />
     </>
   )
 }
