@@ -3,7 +3,7 @@ import { Route, withRouter } from 'react-router-dom'
 import Context from './context'
 import Landing from './components/landing'
 import Home from './components/home'
-import SignUpPage from './components/signUpPage'
+import SignUp from './components/signUp'
 import Footer from './components/footer'
 import Styled from 'styled-components'
 
@@ -16,7 +16,7 @@ const renderRoutes = () => {
     <>
       <Route exact path="/" component={Landing}/>
       <Route exact path="/home" component={Home}/>
-      <Route path="/signUp" component={SignUpPage} />
+      <Route path="/signUp" component={SignUp} />
       <Route path="/" component={Footer} />
     </>
   )
@@ -37,6 +37,8 @@ const App = (props) => {
   )
 
   const [ loginError, setLoginError ] = useState({usernameError: "", passwordError:""})
+
+  const [ signUpError, setSignUpError ] = useState({usernameError: "", passwordError:""})
   
   const [ currentUser, setCurrentUser ] = useState()
 
@@ -92,6 +94,7 @@ const App = (props) => {
   const contextValue = {
     users: users,
     loginError: loginError,
+    signUpError: signUpError,
     currentUser: currentUser,
     handleLogin: handleLogin,
     handleSignOut: handleSignOut
