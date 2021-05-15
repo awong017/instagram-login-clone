@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Route, withRouter } from 'react-router-dom'
+import Context from './context'
 import Landing from './components/landing'
 import SignUpPage from './components/signUpPage'
 import Footer from './components/footer'
@@ -20,10 +21,28 @@ const renderRoutes = () => {
 }
 
 const App = () => {
+  const [ users, setUsers ] = useState(
+    [
+      {
+        id: 1,
+        userName: "awong017",
+        email: "awong017@ucr.edu",
+        phone: 7143081649,
+        password: "password"
+      }
+    ]
+  )
+
+  const contextValue = {
+    users: users
+  }
+
   return (
-    <AppDiv>
-      {renderRoutes()}
-    </AppDiv>
+    <Context.Provider value={contextValue}>
+      <AppDiv>
+        {renderRoutes()}
+      </AppDiv>
+    </Context.Provider>
   )
 }
 
