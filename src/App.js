@@ -1,7 +1,8 @@
 import React from 'react'
 import { Route, withRouter } from 'react-router-dom'
-import LoginMain from './components/loginMain'
+import Landing from './components/landing'
 import SignUpPage from './components/signUpPage'
+import Footer from './components/footer'
 import Styled from 'styled-components'
 
 const AppDiv = Styled.div`
@@ -11,8 +12,9 @@ const AppDiv = Styled.div`
 const renderRoutes = () => {
   return (
     <>
-      <Route exact path="/" component={LoginMain}/>
+      <Route exact path="/" component={Landing}/>
       <Route path="/signUp" component={SignUpPage} />
+      <Route path="/" component={Footer} />
     </>
   )
 }
