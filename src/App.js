@@ -26,11 +26,12 @@ const App = (props) => {
   const [ users, setUsers ] = useState(
     [
       {
-        id: 1,
-        username: "awong017",
         email: "awong017@ucr.edu",
-        phone: 7143081649,
-        password: "password"
+        firstname: "adam",
+        lastname: "wong",
+        username: "awong017",
+        password: "password",
+        phone: 5555555555
       }
     ]
   )
@@ -69,21 +70,31 @@ const App = (props) => {
       setLoginError({usernameError: "", passwordError: ""})
       setCurrentUser(
         {
-          username: userAccount.username,
           email: userAccount.email,
+          username: userAccount.username,
+          firstname: userAccount.firstname,
+          lastname: userAccount.lastname,
+          password: userAccount.password,
           phone: userAccount.phone,
-          password: userAccount.password
         }
       )
       props.history.push("/home")
     }
   }
 
+  // Method for signing out
+
+  const handleSignOut = () => {
+    setCurrentUser({})
+    props.history.push("/")
+  }
+
   const contextValue = {
     users: users,
     loginError: loginError,
     currentUser: currentUser,
-    handleLogin: handleLogin
+    handleLogin: handleLogin,
+    handleSignOut: handleSignOut
   }
 
   return (
