@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { Route, withRouter } from 'react-router-dom'
 import Context from './context'
+import uuid from './uuid/dist/v4'
 import Landing from './components/landing'
 import Home from './components/home'
-import SignUp from './components/signUp'
+import SignUpMain from './components/signUpMain'
+import LoginMain from './components/loginMain'
 import Footer from './components/footer'
 import Styled from 'styled-components'
 
@@ -16,7 +18,8 @@ const renderRoutes = () => {
     <>
       <Route exact path="/" component={Landing}/>
       <Route exact path="/home" component={Home}/>
-      <Route path="/signUp" component={SignUp} />
+      <Route path="/signUp" component={SignUpMain} />
+      <Route path="/login" component={LoginMain} />
       <Route path="/" component={Footer} />
     </>
   )
@@ -26,6 +29,7 @@ const App = (props) => {
   const [ users, setUsers ] = useState(
     [
       {
+        id: 1,
         email: "awong017@ucr.edu",
         firstname: "adam",
         lastname: "wong",
@@ -72,6 +76,7 @@ const App = (props) => {
       setLoginError({usernameError: "", passwordError: ""})
       setCurrentUser(
         {
+          id: userAccount.id,
           email: userAccount.email,
           username: userAccount.username,
           firstname: userAccount.firstname,
@@ -83,6 +88,10 @@ const App = (props) => {
       props.history.push("/home")
     }
   }
+
+  // Method for signing up
+
+
 
   // Method for signing out
 
