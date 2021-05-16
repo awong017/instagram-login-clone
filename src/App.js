@@ -96,7 +96,7 @@ const App = (props) => {
   const handleSignUp = (e, contact, firstname, lastname, username, password) => {
     e.preventDefault()
 
-    if (((!contact.includes("@") && !contact.includes(".com")) && contact.replace(/[\W]/g, "")).length !== contact.split("").map(item => parseInt(item)).filter(Number.isInteger).length || 
+    if ((!contact.includes("@") && !contact.includes(".com") && contact.replace(/[\W]/g, "").length !== contact.split("").map(item => parseInt(item)).filter(Number.isInteger).length) || 
        (contact.includes("@") && !contact.includes(".com")) || (!contact.includes("@") && contact.includes(".com"))) {
         setSignUpError({error: "Please enter a valid Mobile Number or Email."})
       }
@@ -153,7 +153,9 @@ const App = (props) => {
   const contextValue = {
     users: users,
     loginError: loginError,
+    setLoginError: setLoginError,
     signUpError: signUpError,
+    setSignUpError: setSignUpError,
     currentUser: currentUser,
     handleLogin: handleLogin,
     handleSignUp: handleSignUp,
