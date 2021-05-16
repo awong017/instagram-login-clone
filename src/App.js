@@ -56,7 +56,7 @@ const App = (props) => {
     if (
       users.some(user => user.username === name) === false &&
       users.some(user => user.email === name) === false &&
-      users.some(user => user.phone === name) === false
+      users.some(user => user.phone === parseInt(name.replace(/[\W]/g, ""))) === false
     ) {
       setLoginError(
         {
@@ -65,39 +65,40 @@ const App = (props) => {
         }
       )
     }
-
-    userAccount = users.find(user => user.username === name)
-
-    // userAccount = typeof name === "number" ? users.find(user => user.phone === name) :
-    // name.includes("@") ? users.find(user => user.email === name) :
-    // users.find(user => user.email === name)
-
-    // Use else {
-    //   if ()
-    // }
-
-    if (!password || userAccount.password !== password) {
-      setLoginError(
-        {
-          usernameError: "",
-          passwordError: "Sorry, your password was incorrect. Please double-check your password."
-        }
-      )
-    }
     else {
-      setLoginError({usernameError: "", passwordError: ""})
-      setCurrentUser(
-        {
-          id: userAccount.id,
-          email: userAccount.email,
-          username: userAccount.username,
-          firstname: userAccount.firstname,
-          lastname: userAccount.lastname,
-          password: userAccount.password,
-          phone: userAccount.phone,
-        }
-      )
-    props.history.push("/home")
+      if (name.replace(/[\W]/g, "").length === name.split("").map(item => parseInt(item)).filter(Number.isInteger).length) {
+        userAccount = users.find(user => user.phone === parseInt(name.replace(/[\W]/g, "")))
+      }
+      else if (name.includes("@")) {
+        userAccount = users.find(user => user.email === name)
+      }
+      else {
+        userAccount = users.find(user => user.username === name)
+      }
+
+      if (userAccount.password !== password) {
+        setLoginError(
+          {
+            usernameError: "",
+            passwordError: "Sorry, your password was incorrect. Please double-check your password."
+          }
+        )
+      }
+      else {
+        setLoginError({usernameError: "", passwordError: ""})
+        setCurrentUser(
+          {
+            id: userAccount.id,
+            email: userAccount.email,
+            username: userAccount.username,
+            firstname: userAccount.firstname,
+            lastname: userAccount.lastname,
+            password: userAccount.password,
+            phone: parseInt(userAccount.phone),
+          }
+        )
+      props.history.push("/home")
+      }
     }
   }
 
