@@ -40,7 +40,7 @@ const App = (props) => {
     ]
   )
 
-  const [ loginError, setLoginError ] = useState({usernameError: "", passwordError:""})
+  const [ loginError, setLoginError ] = useState({error: ""})
 
   const [ signUpError, setSignUpError ] = useState({error: ""})
   
@@ -54,16 +54,11 @@ const App = (props) => {
     let userAccount = {};
 
     if (
-      users.some(user => user.username === name) === false &&
+      users.some(user => user.username.toLowerCase() === name.toLowerCase()) === false &&
       users.some(user => user.email === name) === false &&
       users.some(user => user.phone === parseInt(name.replace(/[\W]/g, ""))) === false
     ) {
-      setLoginError(
-        {
-          usernameError: "The username you entered doesn't belong to an account. Please check your username and try again.",
-          passwordError: ""
-        }
-      )
+      setLoginError({error: "The username you entered doesn't belong to an account. Please check your username and try again."})
     }
     else {
       if (name.replace(/[\W]/g, "").length === name.split("").map(item => parseInt(item)).filter(Number.isInteger).length) {
@@ -73,19 +68,13 @@ const App = (props) => {
         userAccount = users.find(user => user.email === name)
       }
       else {
-        userAccount = users.find(user => user.username === name)
+        userAccount = users.find(user => user.username.toLowerCase() === name.toLowerCase())
       }
-
       if (userAccount.password !== password) {
-        setLoginError(
-          {
-            usernameError: "",
-            passwordError: "Sorry, your password was incorrect. Please double-check your password."
-          }
-        )
+        setLoginError({error: "Sorry, your password was incorrect. Please double-check your password."})
       }
       else {
-        setLoginError({usernameError: "", passwordError: ""})
+        setLoginError({error: ""})
         setCurrentUser(
           {
             id: userAccount.id,
@@ -107,24 +96,32 @@ const App = (props) => {
   const handleSignUp = (e, contact, firstname, lastname, username, password) => {
     e.preventDefault()
 
-    if ((!contact.includes("@") && !contact.includes(".com")) && contact.replace(/[\W]/g, "").length !== contact.split("").map(item => parseInt(item)).filter(Number.isInteger).length) {
+    if (((!contact.includes("@") && !contact.includes(".com")) && contact.replace(/[\W]/g, "")).length !== contact.split("").map(item => parseInt(item)).filter(Number.isInteger).length || 
+       (contact.includes("@") && !contact.includes(".com")) || (!contact.includes("@") && contact.includes(".com"))) {
         setSignUpError({error: "Please enter a valid Mobile Number or Email."})
       }
     else {
       if (users.some(user => user.email === contact) === true || users.some(user => user.phone === parseInt(contact.replace(/[\W]/g, ""))) === true) {
         setSignUpError({error: "Account has already been created."})
       }
+      else if (lastname === undefined) {
+        setSignUpError({error: "Please provide full name."})
+      } 
       else if (users.some(user => user.username === username) === true) {
         setSignUpError({error: "This username isn't available. Please try another."})
       }
+      else if (password.length < 6) {
+        setSignUpError({error: "Password must be at least 6 characters long"})
+      }
       else {
+        setSignUpError({error: ""})
         if (contact.includes("@")) {
           const newUser = {
             id: uuid(),
             email: contact,
             username: username,
-            firstname: firstname,
-            lastname: lastname,
+            firstname: firstname.toLowerCase(),
+            lastname: lastname.toLowerCase(),
             password: password,
             phone: ""
           }
@@ -136,8 +133,8 @@ const App = (props) => {
             id: uuid(),
             email: "",
             username: username,
-            firstname: firstname,
-            lastname: lastname,
+            firstname: firstname.toLowerCase(),
+            lastname: lastname.toLowerCase(),
             password: password,
             phone: contact
             }
@@ -147,34 +144,6 @@ const App = (props) => {
       }
     }
   }
-
-    // if (typeof contact === "number") {
-    //   const newUser = {
-    //     id: uuid(),
-    //     email: "",
-    //     username: username,
-    //     firstname: firstname,
-    //     lastname: lastname,
-    //     password: password,
-    //     phone: contact
-    //   }
-    //   setUsers([...users, newUser])
-    // }
-    // else {
-    //   const newUser = {
-    //     id: uuid(),
-    //     email: contact,
-    //     username: username,
-    //     firstname: firstname,
-    //     lastname: lastname,
-    //     password: password,
-    //     phone: ""
-    //   }
-    //   setUsers([...users, newUser])
-    // }
-    // props.history.push("/")
-
-  // Method for signing out
 
   const handleSignOut = () => {
     setCurrentUser({})
