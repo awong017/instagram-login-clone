@@ -51,10 +51,12 @@ const App = (props) => {
   const handleLogin = (e, name, password) => {
     e.preventDefault()
 
+    let userAccount = {};
+
     if (
       users.some(user => user.username === name) === false &&
       users.some(user => user.email === name) === false &&
-      users.some(user => user.password === name) === false
+      users.some(user => user.phone === name) === false
     ) {
       setLoginError(
         {
@@ -63,7 +65,18 @@ const App = (props) => {
         }
       )
     }
-    else if (!password) {
+
+    userAccount = users.find(user => user.username === name)
+
+    // userAccount = typeof name === "number" ? users.find(user => user.phone === name) :
+    // name.includes("@") ? users.find(user => user.email === name) :
+    // users.find(user => user.email === name)
+
+    // Use else {
+    //   if ()
+    // }
+
+    if (!password || userAccount.password !== password) {
       setLoginError(
         {
           usernameError: "",
@@ -72,7 +85,6 @@ const App = (props) => {
       )
     }
     else {
-      let userAccount = users.find(user => user.username === name)
       setLoginError({usernameError: "", passwordError: ""})
       setCurrentUser(
         {
@@ -85,7 +97,7 @@ const App = (props) => {
           phone: userAccount.phone,
         }
       )
-      props.history.push("/home")
+    props.history.push("/home")
     }
   }
 
