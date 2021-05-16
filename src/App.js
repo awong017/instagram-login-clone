@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Route, withRouter } from 'react-router-dom'
 import Context from './context'
-import uuid from './uuid/dist/v4'
+import uuid from 'uuid/dist/v4'
 import Landing from './components/landing'
 import Home from './components/home'
 import SignUpMain from './components/signUpMain'
@@ -91,7 +91,35 @@ const App = (props) => {
 
   // Method for signing up
 
+  const handleSignUp = (e, contact, firstname, lastname, username, password) => {
+    e.preventDefault()
 
+    if (typeof contact === "number") {
+      const newUser = {
+        id: uuid(),
+        email: "",
+        username: username,
+        firstname: firstname,
+        lastname: lastname,
+        password: password,
+        phone: contact
+      }
+      setUsers([...users, newUser])
+    }
+    else {
+      const newUser = {
+        id: uuid(),
+        email: contact,
+        username: username,
+        firstname: firstname,
+        lastname: lastname,
+        password: password,
+        phone: ""
+      }
+      setUsers([...users, newUser])
+    }
+    props.history.push("/")
+  }
 
   // Method for signing out
 
@@ -106,6 +134,7 @@ const App = (props) => {
     signUpError: signUpError,
     currentUser: currentUser,
     handleLogin: handleLogin,
+    handleSignUp: handleSignUp,
     handleSignOut: handleSignOut
   }
 
