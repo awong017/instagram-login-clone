@@ -42,7 +42,7 @@ const App = (props) => {
 
   const [ loginError, setLoginError ] = useState({usernameError: "", passwordError:""})
 
-  const [ signUpError, setSignUpError ] = useState({usernameError: "", passwordError:""})
+  const [ signUpError, setSignUpError ] = useState({error: ""})
   
   const [ currentUser, setCurrentUser ] = useState()
 
@@ -107,32 +107,72 @@ const App = (props) => {
   const handleSignUp = (e, contact, firstname, lastname, username, password) => {
     e.preventDefault()
 
-    if (typeof contact === "number") {
-      const newUser = {
-        id: uuid(),
-        email: "",
-        username: username,
-        firstname: firstname,
-        lastname: lastname,
-        password: password,
-        phone: contact
+    if ((!contact.includes("@") && !contact.includes(".com")) && contact.replace(/[\W]/g, "").length !== contact.split("").map(item => parseInt(item)).filter(Number.isInteger).length) {
+        setSignUpError({error: "Please enter a valid Mobile Number or Email."})
       }
-      setUsers([...users, newUser])
-    }
     else {
-      const newUser = {
-        id: uuid(),
-        email: contact,
-        username: username,
-        firstname: firstname,
-        lastname: lastname,
-        password: password,
-        phone: ""
+      if (users.some(user => user.email === contact) === true || users.some(user => user.phone === parseInt(contact.replace(/[\W]/g, ""))) === true) {
+        setSignUpError({error: "Account has already been created."})
       }
-      setUsers([...users, newUser])
+      else if (users.some(user => user.username === username) === true) {
+        setSignUpError({error: "This username isn't available. Please try another."})
+      }
+      else {
+        if (contact.includes("@")) {
+          const newUser = {
+            id: uuid(),
+            email: contact,
+            username: username,
+            firstname: firstname,
+            lastname: lastname,
+            password: password,
+            phone: ""
+          }
+          setUsers([...users, newUser])
+          props.history.push("/")
+        }
+        else {
+          const newUser = {
+            id: uuid(),
+            email: "",
+            username: username,
+            firstname: firstname,
+            lastname: lastname,
+            password: password,
+            phone: contact
+            }
+          setUsers([...users, newUser])
+          props.history.push("/")
+        }
+      }
     }
-    props.history.push("/")
   }
+
+    // if (typeof contact === "number") {
+    //   const newUser = {
+    //     id: uuid(),
+    //     email: "",
+    //     username: username,
+    //     firstname: firstname,
+    //     lastname: lastname,
+    //     password: password,
+    //     phone: contact
+    //   }
+    //   setUsers([...users, newUser])
+    // }
+    // else {
+    //   const newUser = {
+    //     id: uuid(),
+    //     email: contact,
+    //     username: username,
+    //     firstname: firstname,
+    //     lastname: lastname,
+    //     password: password,
+    //     phone: ""
+    //   }
+    //   setUsers([...users, newUser])
+    // }
+    // props.history.push("/")
 
   // Method for signing out
 
